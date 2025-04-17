@@ -1,4 +1,4 @@
-# Products Microservice
+# Client Gateway
 
 ## DEV
 

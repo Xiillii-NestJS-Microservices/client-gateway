@@ -6,6 +6,7 @@ interface CustomRpcError {
   status?: number | string; // Make status optional and allow string
 }
 
+// TODO: Fix bug. RpcCustomException catch and not catch some error, for example, when a listener is down.
 @Catch(RpcException)
 export class RpcCustomExceptionFilter implements ExceptionFilter {
   catch(exception: RpcException, host: ArgumentsHost) {

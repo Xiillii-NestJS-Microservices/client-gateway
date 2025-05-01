@@ -7,7 +7,7 @@ interface CustomRpcError {
 }
 
 @Catch(RpcException)
-export class RpcCustomExceptionFilter implements ExceptionFilter<RpcException> {
+export class RpcCustomExceptionFilter implements ExceptionFilter {
   catch(exception: RpcException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -17,6 +17,16 @@ export class RpcCustomExceptionFilter implements ExceptionFilter<RpcException> {
     const message = Array.isArray(rpcError.message)
       ? rpcError.message
       : [rpcError.message];
+
+    if (message.toString().includes('Empty response')) {
+      return response.status(500).json({
+        status: 500,
+        message: message
+          .toString()
+          .substring(0, message.toString().indexOf('(') - 1),
+      });
+    }
+
     let status = 400; // Default status
 
     if (

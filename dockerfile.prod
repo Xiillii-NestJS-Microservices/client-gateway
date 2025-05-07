@@ -1,4 +1,5 @@
-FROM node:21-alpine3.20
+## Dependencies
+FROM node:21-alpine3.20 as deps
 
 WORKDIR /usr/src/app
 
@@ -6,9 +7,38 @@ COPY package*.json ./
 
 RUN npm install
 
+
+
+
+## Builder
+FROM node:21-alpine3.20 as build
+
+WORKDIR /usr/src/app
+
+# Copy from deps, the node modules
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+
+# Copy the application code
 COPY . .
 
+# RUN npm run test
 RUN npm run build
+
+RUN npm ci -f --only=production && npm cache clean --force
+
+
+
+## Docker image creation
+FROM node:21-alpine3.20 as prod
+
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+
+ENV NODE_ENV=production
+
+USER node
 
 EXPOSE 3000
 

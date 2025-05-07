@@ -12,7 +12,7 @@ import { NATS_SERVICE } from 'src/config';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { catchError } from 'rxjs';
 import { AuthGuard } from './guard/auth.guard';
-import { User } from './decorator';
+import { Token, User } from './decorator';
 import { CurrentUser } from './interface/current-user.interface';
 
 @Controller('auth')
@@ -39,12 +39,12 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('verify')
-  verifyToken(@User() user: CurrentUser) {
+  verifyToken(@User() user: CurrentUser, @Token() token: string) {
     // const user = req['user'];
     // const token = req['token'];
     // return { user, token };
 
-    return { user };
+    return { user, token };
     // return this.client.send('auth.verify.token', {}).pipe(
     //   catchError((error) => {
     //     throw new RpcException(error);

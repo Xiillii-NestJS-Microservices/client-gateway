@@ -10,7 +10,7 @@ export const User = createParamDecorator(
 
     if (!request.user) {
       throw new InternalServerErrorException(
-        'User not found in request (AuthGuard called)',
+        'User not found in request (AuthGuard called?)',
       );
     }
 

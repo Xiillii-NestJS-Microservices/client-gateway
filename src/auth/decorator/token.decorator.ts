@@ -10,7 +10,7 @@ export const Token = createParamDecorator(
 
     if (!request.token) {
       throw new InternalServerErrorException(
-        'User not found in request (AuthGuard called?)',
+        'Token not found in request (AuthGuard called?)',
       );
     }
 
